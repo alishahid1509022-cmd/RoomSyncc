@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomSync - Manage Rooms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .dark {
+            background-color: #1a1a2e;
+            color: #000000;
+        }
+        .dark .bg-white { background-color: #16213e !important; color: #eee !important; }
+        .dark .bg-gray-50 { background-color: #0f0f1a !important; }
+        .dark .text-gray-600 { color: #aaa !important; }
+        .dark .text-gray-700 { color: #ccc !important; }
+        .dark .border { border-color: #2a2a4a !important; }
+        .dark input, .dark select, .dark textarea {
+            background-color: #0f0f1a !important;
+            color: #eee !important;
+            border-color: #2a2a4a !important;
+        }
+        .theme-btn {
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: #e2e8f0;
+        }
+        .dark .theme-btn {
+            background: #334155;
+        }
+        .nav-link {
+            transition: color 0.2s;
+        }
+        .nav-link:hover {
+            color: #2563eb;
+        }
+        .dark .nav-link:hover {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 transition-colors duration-300">
+    <!-- NAVBAR -->
+   <nav>
+<a href="../../../index.html" style="margin-right:20px;text-decoration:none;color:#333;">Home</a>
+<a href="../about/about.html" style="margin-right:20px;text-decoration:none;color:#333;">About</a>
+<a href="../contact/contact.html" style="margin-right:20px;text-decoration:none;color:#333;">Contact</a>
+<a href="../signup/signup.html" style="margin-right:15px;color:#2563eb;">Sign Up</a>
+<a href="../signin/signin.html" style="background:#2563eb;color:white;padding:8px 14px;border-radius:5px;text-decoration:none;">Sign In</a>
+<a href="../room/room.html" style="background:#2563eb;color:white;padding:8px 14px;border-radius:5px;text-decoration:none;">Room</a>
+<button id="themeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">🌙</button>
+</nav>
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">🏠 Room Management System</h1>
+        
+        <!-- ADD ROOM FORM (CREATE) -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">➕ Add New Room</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <input type="text" id="roomTitle" placeholder="Room Title" class="p-2 border rounded">
+                <input type="text" id="roomCity" placeholder="City" class="p-2 border rounded">
+                <input type="number" id="roomRent" placeholder="Rent (PKR)" class="p-2 border rounded">
+                <select id="roomGender" class="p-2 border rounded">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Any">Any</option>
+                </select>
+                <select id="roomType" class="p-2 border rounded">
+                    <option value="Hostel">Hostel</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Single Room">Single Room</option>
+                    <option value="Shared Room">Shared Room</option>
+                </select>
+                <input type="number" id="roomRating" placeholder="Rating (1-5)" min="1" max="5" step="0.1" class="p-2 border rounded">
+                <button onclick="addRoom()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">➕ Add Room</button>
+            </div>
+        </div>
+
+        <!-- SEARCH & FILTER SECTION -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">🔍 Search & Filter</h2>
+            <div class="grid md:grid-cols-4 gap-4">
+                <input type="text" id="searchInput" placeholder="Search by title or city..." class="p-2 border rounded">
+                <select id="filterGender" class="p-2 border rounded">
+                    <option value="">All Genders</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Any">Any</option>
+                </select>
+                <select id="filterType" class="p-2 border rounded">
+                    <option value="">All Types</option>
+                    <option value="Hostel">Hostel</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Single Room">Single Room</option>
+                    <option value="Shared Room">Shared Room</option>
+                </select>
+                <select id="sortBy" class="p-2 border rounded">
+                    <option value="">Sort by</option>
+                    <option value="rent_asc">Rent: Low to High</option>
+                    <option value="rent_desc">Rent: High to Low</option>
+                    <option value="rating_desc">Rating: High to Low</option>
+                </select>
+            </div>
+            <div class="mt-4 flex gap-2 flex-wrap">
+                <button onclick="filterByPriceRange(0, 15000)" class="bg-green-600 text-white px-3 py-1 rounded text-sm">Under 15k</button>
+                <button onclick="filterByPriceRange(15000, 25000)" class="bg-green-600 text-white px-3 py-1 rounded text-sm">15k - 25k</button>
+                <button onclick="filterByPriceRange(25000, 100000)" class="bg-green-600 text-white px-3 py-1 rounded text-sm">Above 25k</button>
+                <button onclick="showTopRated()" class="bg-yellow-600 text-white px-3 py-1 rounded text-sm">Top Rated (4+ ⭐)</button>
+                <button onclick="showAffordable()" class="bg-purple-600 text-white px-3 py-1 rounded text-sm">Affordable Only</button>
+                <button onclick="resetFilters()" class="bg-gray-500 text-white px-3 py-1 rounded text-sm">Reset All</button>
+            </div>
+        </div>
+
+        <!-- STATISTICS SECTION -->
+        <div class="grid md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <p class="text-gray-600">Total Rooms</p>
+                <p class="text-2xl font-bold text-blue-600" id="totalRooms">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <p class="text-gray-600">Average Rent</p>
+                <p class="text-2xl font-bold text-green-600" id="avgRent">PKR 0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <p class="text-gray-600">Available Rooms</p>
+                <p class="text-2xl font-bold text-purple-600" id="availableRooms">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <p class="text-gray-600">Avg Rating</p>
+                <p class="text-2xl font-bold text-yellow-600" id="avgRating">0</p>
+            </div>
+        </div>
+
+        <!-- ROOMS GRID -->
+        <div id="roomContainer" class="grid md:grid-cols-3 gap-6"></div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96">
+            <h3 class="text-xl font-bold mb-4">Edit Room</h3>
+            <input type="text" id="editTitle" placeholder="Title" class="w-full p-2 border rounded mb-3">
+            <input type="text" id="editCity" placeholder="City" class="w-full p-2 border rounded mb-3">
+            <input type="number" id="editRent" placeholder="Rent" class="w-full p-2 border rounded mb-3">
+            <select id="editGender" class="w-full p-2 border rounded mb-3">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Any">Any</option>
+            </select>
+            <select id="editType" class="w-full p-2 border rounded mb-3">
+                <option value="Hostel">Hostel</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Single Room">Single Room</option>
+                <option value="Shared Room">Shared Room</option>
+            </select>
+            <input type="number" id="editRating" placeholder="Rating (1-5)" min="1" max="5" step="0.1" class="w-full p-2 border rounded mb-3">
+            <div class="flex gap-2">
+                <button onclick="updateRoom()" class="bg-blue-600 text-white px-4 py-2 rounded flex-1">Save Changes</button>
+                <button onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded flex-1">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white text-center py-6 mt-8">
+        <p>© 2026 RoomSync – Smart Roommate Finder</p>
+    </footer>
+
+    <script>
+        // DATABASE
+        let rooms = [
+            { id: 1, title: "Cozy Hostel Room", city: "Lahore", rent: 12000, gender: "Male", type: "Hostel", rating: 4.5, available: true, createdAt: new Date("2025-01-15") },
+            { id: 2, title: "Luxury Apartment", city: "Karachi", rent: 35000, gender: "Female", type: "Apartment", rating: 4.8, available: true, createdAt: new Date("2025-02-20") },
+            { id: 3, title: "Student Shared Room", city: "Islamabad", rent: 8000, gender: "Any", type: "Shared Room", rating: 4.2, available: true, createdAt: new Date("2025-03-01") },
+            { id: 4, title: "Premium Single Room", city: "Lahore", rent: 25000, gender: "Male", type: "Single Room", rating: 4.9, available: true, createdAt: new Date("2025-03-10") },
+            { id: 5, title: "Peaceful Hostel", city: "Multan", rent: 10000, gender: "Female", type: "Hostel", rating: 4.0, available: true, createdAt: new Date("2025-01-05") }
+        ];
+
+        let currentFilteredRooms = [...rooms];
+        let currentEditId = null;
+
+        function displayRooms() {
+            let container = document.getElementById("roomContainer");
+            if (!container) return;
+            
+            if (currentFilteredRooms.length === 0) {
+                container.innerHTML = `<div class="col-span-3 text-center py-10 text-gray-500">No rooms found. Add some rooms!</div>`;
+                updateStatistics();
+                return;
+            }
+            
+            container.innerHTML = currentFilteredRooms.map(room => `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition border">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold">${room.title}</h3>
+                            <span class="text-yellow-500">⭐ ${room.rating}</span>
+                        </div>
+                        <p class="text-gray-600 mb-2">📍 ${room.city}</p>
+                        <p class="text-gray-600 mb-2">💰 PKR ${room.rent.toLocaleString()}</p>
+                        <p class="text-gray-600 mb-2">👤 ${room.gender}</p>
+                        <p class="text-gray-600 mb-3">🏠 ${room.type}</p>
+                        <div class="flex gap-2">
+                            <button onclick="openEditModal(${room.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">✏️ Edit</button>
+                            <button onclick="deleteRoom(${room.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑️ Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+            updateStatistics();
+        }
+
+        function updateStatistics() {
+            let totalRent = currentFilteredRooms.reduce((sum, room) => sum + room.rent, 0);
+            let avgRent = currentFilteredRooms.length > 0 ? Math.round(totalRent / currentFilteredRooms.length) : 0;
+            let totalRating = currentFilteredRooms.reduce((sum, room) => sum + (room.rating || 0), 0);
+            let avgRating = currentFilteredRooms.length > 0 ? (totalRating / currentFilteredRooms.length).toFixed(1) : 0;
+            let availableCount = currentFilteredRooms.filter(room => room.available !== false).length;
+            
+            document.getElementById("totalRooms").innerText = currentFilteredRooms.length;
+            document.getElementById("avgRent").innerText = "PKR " + avgRent.toLocaleString();
+            document.getElementById("availableRooms").innerText = availableCount;
+            document.getElementById("avgRating").innerText = avgRating;
+        }
+
+        function addRoom() {
+            let title = document.getElementById("roomTitle").value.trim();
+            let city = document.getElementById("roomCity").value.trim();
+            let rent = parseInt(document.getElementById("roomRent").value);
+            let gender = document.getElementById("roomGender").value;
+            let type = document.getElementById("roomType").value;
+            let rating = parseFloat(document.getElementById("roomRating").value) || 3.0;
+            
+            if (!title || title.length < 2) { alert("Title must be at least 2 characters"); return; }
+            if (!city || city.length < 2) { alert("City must be at least 2 characters"); return; }
+            if (isNaN(rent) || rent < 1000) { alert("Enter valid rent (min 1000)"); return; }
+            
+            rooms.push({
+                id: Date.now(),
+                title: title,
+                city: city,
+                rent: rent,
+                gender: gender,
+                type: type,
+                rating: rating,
+                available: true,
+                createdAt: new Date()
+            });
+            
+            resetFilters();
+            document.getElementById("roomTitle").value = "";
+            document.getElementById("roomCity").value = "";
+            document.getElementById("roomRent").value = "";
+            document.getElementById("roomRating").value = "";
+            alert("Room added successfully!");
+        }
+
+        function deleteRoom(id) {
+            if (confirm("Are you sure you want to delete this room?")) {
+                rooms = rooms.filter(room => room.id !== id);
+                resetFilters();
+                alert("Room deleted successfully!");
+            }
+        }
+
+        function openEditModal(id) {
+            let room = rooms.find(r => r.id === id);
+            if (!room) return;
+            currentEditId = id;
+            document.getElementById("editTitle").value = room.title;
+            document.getElementById("editCity").value = room.city;
+            document.getElementById("editRent").value = room.rent;
+            document.getElementById("editGender").value = room.gender;
+            document.getElementById("editType").value = room.type;
+            document.getElementById("editRating").value = room.rating;
+            document.getElementById("editModal").classList.remove("hidden");
+            document.getElementById("editModal").classList.add("flex");
+        }
+
+        function updateRoom() {
+            let room = rooms.find(r => r.id === currentEditId);
+            if (!room) return;
+            room.title = document.getElementById("editTitle").value;
+            room.city = document.getElementById("editCity").value;
+            room.rent = parseInt(document.getElementById("editRent").value);
+            room.gender = document.getElementById("editGender").value;
+            room.type = document.getElementById("editType").value;
+            room.rating = parseFloat(document.getElementById("editRating").value);
+            resetFilters();
+            closeModal();
+            alert("Room updated successfully!");
+        }
+
+        function closeModal() {
+            document.getElementById("editModal").classList.add("hidden");
+            document.getElementById("editModal").classList.remove("flex");
+        }
+
+        function applyFilters() {
+            let filtered = [...rooms];
+            let searchTerm = document.getElementById("searchInput")?.value.toLowerCase().trim() || "";
+            let genderFilter = document.getElementById("filterGender")?.value || "";
+            let typeFilter = document.getElementById("filterType")?.value || "";
+            let sortBy = document.getElementById("sortBy")?.value || "";
+            
+            if (searchTerm) {
+                filtered = filtered.filter(room => 
+                    room.title.toLowerCase().includes(searchTerm) || 
+                    room.city.toLowerCase().includes(searchTerm)
+                );
+            }
+            if (genderFilter) filtered = filtered.filter(room => room.gender === genderFilter);
+            if (typeFilter) filtered = filtered.filter(room => room.type === typeFilter);
+            
+            if (sortBy === "rent_asc") filtered.sort((a, b) => a.rent - b.rent);
+            else if (sortBy === "rent_desc") filtered.sort((a, b) => b.rent - a.rent);
+            else if (sortBy === "rating_desc") filtered.sort((a, b) => b.rating - a.rating);
+            
+            currentFilteredRooms = filtered;
+            displayRooms();
+        }
+        
+        function filterByPriceRange(min, max) {
+            currentFilteredRooms = rooms.filter(room => room.rent >= min && room.rent <= max);
+            displayRooms();
+        }
+        
+        function showTopRated() {
+            currentFilteredRooms = rooms.filter(room => room.rating >= 4.0);
+            displayRooms();
+        }
+        
+        function showAffordable() {
+            let avgRent = rooms.reduce((sum, r) => sum + r.rent, 0) / rooms.length;
+            currentFilteredRooms = rooms.filter(room => room.rent < avgRent);
+            displayRooms();
+        }
+        
+        function resetFilters() {
+            if (document.getElementById("searchInput")) document.getElementById("searchInput").value = "";
+            if (document.getElementById("filterGender")) document.getElementById("filterGender").value = "";
+            if (document.getElementById("filterType")) document.getElementById("filterType").value = "";
+            if (document.getElementById("sortBy")) document.getElementById("sortBy").value = "";
+            currentFilteredRooms = [...rooms];
+            displayRooms();
+        }
+
+        function initTheme() {
+            let savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById("themeToggle").innerHTML = "☀️ Light";
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            if (document.body.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                document.getElementById("themeToggle").innerHTML = "☀️ Light";
+            } else {
+                localStorage.setItem('theme', 'light');
+                document.getElementById("themeToggle").innerHTML = "🌙 Dark";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            displayRooms();
+            initTheme();
+            document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+            document.getElementById("searchInput").addEventListener("input", applyFilters);
+            document.getElementById("filterGender").addEventListener("change", applyFilters);
+            document.getElementById("filterType").addEventListener("change", applyFilters);
+            document.getElementById("sortBy").addEventListener("change", applyFilters);
+        });
+    </script>
+</body>
+</html>

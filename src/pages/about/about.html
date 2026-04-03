@@ -1,0 +1,129 @@
+<nav class="bg-white shadow" style="padding:15px;">
+<div style="display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:auto;">
+
+<h2 style="font-size:22px;font-weight:bold;color:#2563eb;">
+    <style>
+    /* Simple Dark Mode */
+    .dark-mode {
+        background-color: #000000 !important;
+        color: #eee !important;
+    }
+    
+    .dark-mode .bg-white,
+    .dark-mode .bg-gray-50,
+    .dark-mode .bg-gray-100,
+    .dark-mode .bg-gray-200 {
+        background-color: #111111 !important;
+        color: #eee !important;
+    }
+    
+    .dark-mode p,
+    .dark-mode h1,
+    .dark-mode h2,
+    .dark-mode h3,
+    .dark-mode span,
+    .dark-mode div {
+        color: #2563eb !important;
+    }
+    
+    .dark-mode input,
+    .dark-mode select,
+    .dark-mode textarea {
+        background-color: #222222 !important;
+        color: #ffffff !important;
+        border-color: #444444 !important;
+    }
+    
+    .theme-btn {
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: #111111;
+    }
+    
+    .dark-mode .theme-btn {
+        background: #333333;
+        color: white;
+    }
+</style>
+RoomSync
+</h2>
+
+<nav>
+<a href="../../../index.html" style="margin-right:20px;text-decoration:none;color:#333;">Home</a>
+<a href="../about/about.html" style="margin-right:20px;text-decoration:none;color:#333;">About</a>
+<a href="../contact/contact.html" style="margin-right:20px;text-decoration:none;color:#333;">Contact</a>
+<a href="../signup/signup.html" style="margin-right:15px;color:#2563eb;">Sign Up</a>
+<a href="../signin/signin.html" style="background:#2563eb;color:white;padding:8px 14px;border-radius:5px;text-decoration:none;">Sign In</a>
+<a href="../room/room.html" style="background:#2563eb;color:white;padding:8px 14px;border-radius:5px;text-decoration:none;">Room</a>
+<button id="themeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">🌙</button>
+</nav>
+
+</div>
+</nav>
+
+<section style="padding:60px;max-width:1000px;margin:auto;">
+<h1>About RoomSync</h1>
+
+<p>
+RoomSync is a smart hostel and roommate finder platform designed to help students 
+find compatible roommates based on lifestyle preferences.
+</p>
+</section>
+
+<section style="background:#f8fafc;padding:50px;">
+<div style="display:flex;justify-content:space-around;text-align:center;">
+
+<div>
+<h2>10k+</h2>
+<p>Students Registered</p>
+</div>
+
+<div>
+<h2>4k+</h2>
+<p>Rooms Listed</p>
+</div>
+
+<div>
+<h2>95%</h2>
+<p>Match Satisfaction</p>
+</div>
+
+</div>
+</section>
+
+<script>
+    // Load saved theme on page start
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            document.getElementById("themeToggle").innerHTML = "☀️ Light";
+        } else {
+            localStorage.setItem('theme', 'light');
+            document.getElementById("themeToggle").innerHTML = "🌙 Dark";
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        const themeBtn = document.getElementById("themeToggle");
+        if (themeBtn) {
+            if (localStorage.getItem('theme') === 'dark') {
+                themeBtn.innerHTML = "☀️ Light";
+            } else {
+                themeBtn.innerHTML = "🌙 Dark";
+            }
+            themeBtn.addEventListener("click", toggleTheme);
+        }
+    });
+</script>
+
+
+<footer style="background:#1e293b;color:white;text-align:center;padding:25px;margin-top:40px;">
+<p>©️ 2026 RoomSync – Smart Roommate Finder</p>
+</footer>

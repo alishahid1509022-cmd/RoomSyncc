@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>RoomSync - Sign Up</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body style="background:#f8fafc;">
+
+<!-- Navbar -->
+<nav class="bg-white shadow" style="padding:15px;">
+<div style="display:flex;justify-content:space-between;max-width:1100px;margin:auto;">
+
+<h2 style="font-weight:bold;color:#2563eb;">RoomSync</h2>
+
+<nav>
+<a href="../../../index.html" style="margin-right:20px;text-decoration:none;color:#333;">Home</a>
+<a href="../about/about.html" style="margin-right:20px;text-decoration:none;color:#333;">About</a>
+<a href="../contact/contact.html" style="margin-right:20px;text-decoration:none;color:#333;">Contact</a>
+<a href="../signup/signup.html" style="margin-right:15px;color:#2563eb;">Sign Up</a>
+<a href="../signin/signin.html" style="background:#2563eb;color:white;padding:8px 14px;border-radius:5px;text-decoration:none;">Sign In</a>
+<a href="../room/room.html" style="background:#2563eb;color:white;padding:8px 14px;border-radius:5px;text-decoration:none;">Room</a>
+<button id="themeToggle" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">🌙</button>
+</nav>
+
+</div>
+</nav>
+
+
+<!-- Sign Up Form -->
+
+<div style="max-width:400px;margin:80px auto;background:white;padding:30px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+
+<h2 style="font-size:24px;font-weight:bold;margin-bottom:20px;text-align:center;">
+Create Account
+</h2>
+
+<form>
+
+<label>Full Name</label>
+<input type="text" required
+style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:5px;">
+
+<label>Email</label>
+<input type="email" required
+style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:5px;">
+
+<label>Phone</label>
+<input type="text"
+style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:5px;">
+
+<label>Password</label>
+<input type="password" required
+style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ccc;border-radius:5px;">
+
+<label>Confirm Password</label>
+<input type="password" required
+style="width:100%;padding:10px;margin-bottom:20px;border:1px solid #ccc;border-radius:5px;">
+
+<button style="width:100%;background:#2563eb;color:white;padding:10px;border-radius:6px;">
+Sign Up
+</button>
+
+</form>
+
+<p style="margin-top:15px;text-align:center;">
+Already have an account?
+<a href="../signin/signin.html" style="color:#2563eb;">Sign in</a>
+</p>
+
+</div>
+
+</body>
+</html>
+
+<footer style="background:#1e293b;color:white;text-align:center;padding:25px;margin-top:40px;">
+<p>©️ 2026 RoomSync – Smart Roommate Finder</p>
+</footer>
+
+<style>
+    /* Simple Dark Mode */
+    .dark-mode {
+        background-color: #000000 !important;
+        color: #2563eb !important;
+    }
+    
+    .dark-mode .bg-white,
+    .dark-mode .bg-gray-50,
+    .dark-mode .bg-gray-100,
+    .dark-mode .bg-gray-200 {
+        background-color: #111111 !important;
+        color: #000000 !important;
+    }
+    
+    .dark-mode p,
+    .dark-mode h1,
+    .dark-mode h2,
+    .dark-mode h3,
+    .dark-mode span,
+    .dark-mode div {
+        color: #2563eb !important;
+    }
+    
+    .dark-mode input,
+    .dark-mode select,
+    .dark-mode textarea {
+        background-color: #222222 !important;
+        color: #ffffff !important;
+        border-color: #444444 !important;
+    }
+    
+    .theme-btn {
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: #e2e8f0;
+    }
+    
+    .dark-mode .theme-btn {
+        background: #333333;
+        color: white;
+    }
+</style>
+<script>
+    // Load saved theme on page start
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            document.getElementById("themeToggle").innerHTML = "☀️ Light";
+        } else {
+            localStorage.setItem('theme', 'light');
+            document.getElementById("themeToggle").innerHTML = "🌙 Dark";
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        const themeBtn = document.getElementById("themeToggle");
+        if (themeBtn) {
+            if (localStorage.getItem('theme') === 'dark') {
+                themeBtn.innerHTML = "☀️ Light";
+            } else {
+                themeBtn.innerHTML = "🌙 Dark";
+            }
+            themeBtn.addEventListener("click", toggleTheme);
+        }
+    });
+</script>
